@@ -83,3 +83,6 @@ Docker Network Types:
 `docker run --net <network-name> -p 3000:3000 alanapapa/todo-app`
 
 ***
+
+`docker <container or images or network> prune`         -       delete all
+ 
