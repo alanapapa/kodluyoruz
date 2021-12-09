@@ -5,6 +5,9 @@ services:
         build: .
         ports: 
             - 3000:3000
+        # depends_on:
+        #     - mongodb
+        #     - redis
     mongodb:
         image: mongo:4.4.6
         ports: 
