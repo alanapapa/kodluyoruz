@@ -85,4 +85,13 @@ Docker Network Types:
 ***
 
 `docker <container or images or network> prune`         -       delete all
- 
+
+***
+
+`docker-compose build`
+
+`docker-compose up`
+
+`docker-compose down`
+
+***
