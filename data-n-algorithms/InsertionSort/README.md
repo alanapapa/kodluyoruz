@@ -12,21 +12,27 @@
 
    [2,6,16,18,22,27]
 ***
+
 2. Write the Big-O notation.
 
    Insertion Sort --> O(n²)
-***
-- Time Complexity:
--  Average case: Aradığımız sayının ortada olması
--  Worst case: Aradığımız sayının sonda olması.
-- Best case: Aradığımız sayının dizinin en başında olması.
-***
-3. Dizi sıralandıktan sonra 18 sayısı hangi case kapsamına girer? Yazınız.
- 
-   18 sayısı 16 ile ortada kaldığından dolayı *Average case* kapsamına girer
 
 ***
-4. [7,3,5,8,2,9,4,15,6] dizisinin Insertion Sort'a göre ilk 4 adımını yazınız.
+
+Time Complexity:
+-  Average case: The number we are looking for is in the middle
+-  Worst case: The number we're looking for is at the end.
+- Best case: The number we're looking for is at the top of the array.
+
+***
+
+3. What case does the number 18 fall into after the array is sorted?
+ 
+   Since the number 18 is in the middle with 16, it is included in the **Average case**
+
+***
+
+4. [7,3,5,8,2,9,4,15,6] Write the first 4 steps of the array according to the Insertion Sort.
    
    [3,7,5,8,2,9,4,15,6] 
 
