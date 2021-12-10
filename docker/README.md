@@ -95,3 +95,123 @@ Docker Network Types:
 `docker-compose down`
 
 ***
+
+-------
+
+
+## PRODUCTION 1: wp
+
+```
+ssh root@**ip**
+
+sudo apt-get update
+
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+apt install docker.io
+
+apt install docker-compose
+
+systemctl status docker 
+
+cd /tmp && mkdir web-apps && mkdir web-apps/**domain-name** && cd web-apps/**domain-name**/
+
+vi docker-compose.yml
+    ...wp docker-compose yml...
+
+docker-compose up
+
+docker-compose down
+```
+
+Reverse Proxy
+
+```
+apt install nginx
+
+unlink /etc/nginx/sites-enabled/default
+
+cd /etc/nginx/sites-available/
+
+vi reverse-proxy.conf
+
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name **domain-name.com**;
+        server_name_in_redirect off;
+
+        access_log /var/log/nginx/reverse-access.log;
+        error_log /var/log/nginx/reverse-error.log;
+
+        location / {
+            proxy_set_header Client-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $host;
+            proxy_pass http://127.0.0.1:**8080**;
+        }
+    }
+
+
+ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
+
+nginx -t
+
+systemctl restart nginx
+
+systemctl status nginx
+
+```
+
+```
+cd /tmp/web-apps/**domain-name**
+
+docker-compose up
+```
+
+***
+***
+
+## PRODUCTION 2: sourcecode
+
+```
+scp **project-name**.tar ssh root@**ip**:/tmp/web-apps/
+
+chmod 755 **project-name**.tar
+
+tar xf **project-name**.tar
+
+cd **project-name**
+
+docker build . -t **project-name**-app
+
+docker run -p 8090:8080 -d **project-name**-app
+
+cd /etc/nginx/sites-available/
+
+vi reverse-proxy.conf
+        ......
+        server {
+                listen 80;
+                listen [::]:80;
+                server_name **domain-name.com**;
+                server_name_in_redirect off;
+
+                access_log /var/log/nginx/reverse-access.log;
+                error_log /var/log/nginx/reverse-error.log;
+
+                location / {
+                        proxy_set_header Client-IP $remote_addr;
+                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $host;
+                        proxy_pass http://127.0.0.1:**8090**;
+                }
+        }
+
+systemctl restart nginx
+
+```
