@@ -215,3 +215,95 @@ vi reverse-proxy.conf
 systemctl restart nginx
 
 ```
+
+***
+
+
+При запуске контейнера с ключом `--rm`, то контейнер автоматом удаляется после завершения.
+
+Чтобы оптимизировать работу докера в Докерфайле нужно сперва отдельно скопировать `package*.json` файлы в раб.директорию, Запустить установку зависимостей `RUN npm install`. И только потом заново скопировать все содержимое проекта в раб.директорию образа.
+
+***
+Загрузить в Hub
+
+переименовать образ (just copy):
+
+`docker tag image-name-old dockerHubUsername/image-name-new`
+
+
+```
+docker login
+
+docker push dockerHubUsername/image-name:tag
+
+```
+
+***
+
+В Докерфайле можно указывать переменные через знак `$`:
+
+```
+...
+
+ENV PORT 3000
+
+EXPOSE $PORT
+
+...
+```
+
+***
+
+`--env-file ./relative/path/filename`
+
+***
+
+Makefile
+
+```
+run:
+    docker run -d -p 80:80 ... --name container-name image-name:tag
+stop:
+    docker stop container-name
+
+```
+
+console
+```
+make run
+
+make stop
+```
+
+***
+
+Volumes
+
+Недостаточно просто объявить `VOLUME [ "/app/data" ]`. Так как Volumes бывают анонимные, которые удаляются после удаления контейнера и именованные, которые остаются после удаления контейнера.
+
+Именовать Volume можно во время создания контейнера:
+
+```
+
+docker run -v volume-name:/volumePath/inDockerImage
+
+```
+
+
+Проверить список Volumes: `docker volume ls`
+
+
+***
+
+Режиме разработки (dev mode):
+
+Makefile:
+
+```
+run:
+    docker run -d -p 3000:3000 -v volume-name:/volumePath/inDockerImage --rm --name container-name image-name:tag
+run-dev:
+    docker run -d -p 3000:3000 <<<v "absolutePath/toProjectFolder:/dockerWorkDir" -v /dockerWorkDir/node_modules>>> -v volume-name:/volumePath/inDockerImage --rm --name container-name image-name:tag
+stop:
+    docker stop container-name
+```
